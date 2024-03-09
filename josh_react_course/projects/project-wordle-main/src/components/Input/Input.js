@@ -29,8 +29,11 @@ function Input({ answer, guessList, setGuessList, disabled }) {
         <InputGuess
           disabled={disabled}
           type="text"
+          required
           minLength="5"
           maxLength="5"
+          pattern="[a-zA-z]{5}"
+          title="5 letter word"
           id="guess-input"
           value={input}
           onChange={(event) => setInput(event.target.value.toUpperCase())}

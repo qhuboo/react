@@ -49,7 +49,6 @@ function Game() {
               </GridCell>
             ))
           )}
-
         {squareGrid
           .slice(guessList.length, NUM_OF_GUESSES_ALLOWED)
           .map((row) => {
