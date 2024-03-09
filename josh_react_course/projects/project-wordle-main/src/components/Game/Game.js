@@ -1,24 +1,17 @@
 import React from "react";
 import styled from "styled-components";
-import { range } from "../../utils";
+import { squareGrid } from "../../squareGrid";
+import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
 
-const grid = range(6).map((index) => range(5));
-const squareGrid = grid.map((row) => {
-  return row.map((cell) => {
-    return crypto.randomUUID();
-  });
-});
 function Game({ answer, guessList }) {
   function isWon(guess) {
-    let correct = 0;
     for (let i = 0; i < 5; i++) {
-      if (guess[i].status === "correct") {
-        correct++;
+      if (guess[i].status !== "correct") {
+        return false;
       }
     }
-    return correct;
+    return true;
   }
-
   return (
     <>
       <GameGrid>
@@ -38,7 +31,7 @@ function Game({ answer, guessList }) {
         })}
       </GameGrid>
       <div>
-        {guessList.length > 0 && isWon(guessList[guessList.length - 1]) === 5 && (
+        {guessList.length > 0 && isWon(guessList[guessList.length - 1]) && (
           <div className="happy banner">
             <p>
               <strong>Congratulations!</strong> Got it in{" "}
@@ -49,8 +42,8 @@ function Game({ answer, guessList }) {
             </p>
           </div>
         )}
-        {guessList.length === 6 &&
-          isWon(guessList[guessList.length - 1]) !== 5 && (
+        {guessList.length === NUM_OF_GUESSES_ALLOWED &&
+          !isWon(guessList[guessList.length - 1]) && (
             <div className="sad banner">
               <p>
                 Sorry, the correct answer is <strong>{answer}</strong>.

@@ -2,7 +2,6 @@ import React from "react";
 import Game from "../Game";
 import Header from "../Header";
 import Input from "../Input";
-
 import { sample } from "../../utils";
 import { WORDS } from "../../data";
 

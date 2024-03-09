@@ -10,6 +10,9 @@ function Input({ answer, guessList, setGuessList }) {
       <form
         onSubmit={(event) => {
           event.preventDefault();
+          // The checkGuess takes two strings representing the guess and the answer and it returns
+          // an array of objects where each object contains two properties, the letter and the status of the word.
+          // Here we map through this array of objects and add an id property for mapping later on.
           const resultWithId = checkGuess(input, answer).map((guess) => {
             return {
               letter: guess.letter,
