@@ -1,9 +1,19 @@
 import React from "react";
+import Input from "../Input/Input";
 import styled from "styled-components";
 import { squareGrid } from "../../squareGrid";
 import { NUM_OF_GUESSES_ALLOWED } from "../../constants";
+import { sample } from "../../utils";
+import { WORDS } from "../../data";
 
-function Game({ answer, guessList }) {
+// Pick a random word on every pageload.
+const answer = sample(WORDS);
+// To make debugging easier, we'll log the solution in the console.
+console.info({ answer });
+
+function Game() {
+  const [guessList, setGuessList] = React.useState([]);
+
   function isWon(guess) {
     for (let i = 0; i < 5; i++) {
       if (guess[i].status !== "correct") {
@@ -24,12 +34,19 @@ function Game({ answer, guessList }) {
             ))
           )}
 
-        {squareGrid.slice(guessList.length, 6).map((row) => {
-          return row.map((cell) => {
-            return <GridCell key={cell}></GridCell>;
-          });
-        })}
+        {squareGrid
+          .slice(guessList.length, NUM_OF_GUESSES_ALLOWED)
+          .map((row) => {
+            return row.map((cell) => {
+              return <GridCell key={cell}></GridCell>;
+            });
+          })}
       </GameGrid>
+      <Input
+        answer={answer}
+        guessList={guessList}
+        setGuessList={setGuessList}
+      />
       <div>
         {guessList.length > 0 && isWon(guessList[guessList.length - 1]) && (
           <div className="happy banner">
@@ -58,8 +75,7 @@ function Game({ answer, guessList }) {
 const GameGrid = styled.div`
   width: fit-content;
   display: grid;
-  grid-template-columns: repeat(5, minmax(100px, 1fr));
-  grid-template-rows: repeat(6, minmax(100px, 1fr));
+  grid-template-columns: repeat(5, minmax(10px, 1fr));
   gap: 5px;
 `;
 
@@ -67,6 +83,7 @@ const GridCell = styled.div`
   border: solid;
   height: 100px;
   width: 100px;
+  aspect-ratio: 1/1;
   display: grid;
   place-content: center;
   font-size: 4rem;

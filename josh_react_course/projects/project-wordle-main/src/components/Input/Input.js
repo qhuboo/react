@@ -32,7 +32,7 @@ function Input({ answer, guessList, setGuessList }) {
           maxLength="5"
           id="guess-input"
           value={input}
-          onChange={(event) => setInput(event.target.value)}
+          onChange={(event) => setInput(event.target.value.toUpperCase())}
         />
       </form>
     </div>
