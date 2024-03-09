@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Input from "../Input/Input";
 import styled from "styled-components";
 import { squareGrid } from "../../squareGrid";
@@ -13,6 +13,11 @@ console.info({ answer });
 
 function Game() {
   const [guessList, setGuessList] = React.useState([]);
+  const [gameOver, setGameOver] = React.useState(false);
+
+  useEffect(() => {
+    isGameOver();
+  }, [guessList]);
 
   function isWon(guess) {
     for (let i = 0; i < 5; i++) {
@@ -22,6 +27,17 @@ function Game() {
     }
     return true;
   }
+
+  function isGameOver() {
+    if (
+      (guessList.length > 0 && isWon(guessList[guessList.length - 1])) ||
+      (guessList.length === NUM_OF_GUESSES_ALLOWED &&
+        !isWon(guessList[guessList.length - 1]))
+    ) {
+      setGameOver(true);
+    }
+  }
+
   return (
     <>
       <GameGrid>
@@ -46,6 +62,7 @@ function Game() {
         answer={answer}
         guessList={guessList}
         setGuessList={setGuessList}
+        disabled={gameOver}
       />
       <div>
         {guessList.length > 0 && isWon(guessList[guessList.length - 1]) && (

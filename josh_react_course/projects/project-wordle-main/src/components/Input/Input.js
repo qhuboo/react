@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { checkGuess } from "../../game-helpers";
 
-function Input({ answer, guessList, setGuessList }) {
+function Input({ answer, guessList, setGuessList, disabled }) {
   const [input, setInput] = React.useState("");
 
   return (
@@ -27,6 +27,7 @@ function Input({ answer, guessList, setGuessList }) {
         <InputLabel htmlFor="guess-input">Guess:</InputLabel>
         <br />
         <InputGuess
+          disabled={disabled}
           type="text"
           minLength="5"
           maxLength="5"
