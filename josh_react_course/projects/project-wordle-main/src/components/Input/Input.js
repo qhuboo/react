@@ -2,7 +2,7 @@ import React from "react";
 import styled from "styled-components";
 import { checkGuess } from "../../game-helpers";
 
-function Input({ guessList, setGuessList }) {
+function Input({ answer, guessList, setGuessList }) {
   const [input, setInput] = React.useState("");
 
   return (
@@ -10,7 +10,14 @@ function Input({ guessList, setGuessList }) {
       <form
         onSubmit={(event) => {
           event.preventDefault();
-          setGuessList([...guessList, input]);
+          const resultWithId = checkGuess(input, answer).map((guess) => {
+            return {
+              letter: guess.letter,
+              status: guess.status,
+              id: crypto.randomUUID(),
+            };
+          });
+          setGuessList([...guessList, resultWithId]);
           setInput("");
         }}
       >

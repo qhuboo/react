@@ -1,32 +1,14 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
-import { sample } from "../../utils";
-import { WORDS } from "../../data";
 import { range } from "../../utils";
-import { checkGuess } from "../../game-helpers";
 
-// Pick a random word on every pageload.
-const answer = sample(WORDS);
-// To make debugging easier, we'll log the solution in the console.
-console.info({ answer });
-
-function Game({ guessList }) {
-  const [guessResults, setGuessResults] = React.useState([]);
-  console.log(guessResults);
-  let guessDifference = range(6 - guessList.length);
-
-  useEffect(() => {
-    if (guessList.length > 0) {
-      let resultNoId = checkGuess(guessList[guessList.length - 1], answer);
-      console.log(resultNoId);
-      let resultWithId = resultNoId.map((letter) => {
-        return { ...letter, id: crypto.randomUUID() };
-      });
-      setGuessResults([...guessResults, resultWithId]);
-    }
-    console.log("render");
-  }, [guessList]);
-
+const grid = range(6).map((index) => range(5));
+const squareGrid = grid.map((row) => {
+  return row.map((cell) => {
+    return crypto.randomUUID();
+  });
+});
+function Game({ answer, guessList }) {
   function isWon(guess) {
     let correct = 0;
     for (let i = 0; i < 5; i++) {
@@ -40,42 +22,35 @@ function Game({ guessList }) {
   return (
     <>
       <GameGrid>
-        {guessResults.length > 0 &&
-          guessResults.map((word) =>
+        {guessList.length > 0 &&
+          guessList.map((word) =>
             word.map((letter) => (
               <GridCell key={letter.id} className={`cell ${letter.status}`}>
                 {letter.letter}
               </GridCell>
             ))
           )}
-        {guessDifference.length > 0 &&
-          guessDifference.map((index) => {
-            return (
-              <React.Fragment key={index}>
-                <GridCell></GridCell>
-                <GridCell></GridCell>
-                <GridCell></GridCell>
-                <GridCell></GridCell>
-                <GridCell></GridCell>
-              </React.Fragment>
-            );
-          })}
+
+        {squareGrid.slice(guessList.length, 6).map((row) => {
+          return row.map((cell) => {
+            return <GridCell key={cell}></GridCell>;
+          });
+        })}
       </GameGrid>
       <div>
-        {guessResults.length > 0 &&
-          isWon(guessResults[guessResults.length - 1]) === 5 && (
-            <div className="happy banner">
-              <p>
-                <strong>Congratulations!</strong> Got it in{" "}
-                <strong>
-                  {guessResults.length} guess{guessList.length > 1 ? "es" : ""}
-                </strong>
-                .
-              </p>
-            </div>
-          )}
+        {guessList.length > 0 && isWon(guessList[guessList.length - 1]) === 5 && (
+          <div className="happy banner">
+            <p>
+              <strong>Congratulations!</strong> Got it in{" "}
+              <strong>
+                {guessList.length} guess{guessList.length > 1 ? "es" : ""}
+              </strong>
+              .
+            </p>
+          </div>
+        )}
         {guessList.length === 6 &&
-          isWon(guessResults[guessResults.length - 1]) !== 5 && (
+          isWon(guessList[guessList.length - 1]) !== 5 && (
             <div className="sad banner">
               <p>
                 Sorry, the correct answer is <strong>{answer}</strong>.
