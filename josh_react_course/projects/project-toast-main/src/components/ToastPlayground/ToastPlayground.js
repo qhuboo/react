@@ -2,9 +2,9 @@ import React from "react";
 
 import Button from "../Button";
 
+import { ToastContext } from "../ToastProvider/ToastProvider";
 import styles from "./ToastPlayground.module.css";
 import ToastShelf from "../ToastShelf/ToastShelf";
-import { ToastContext } from "../ToastProvider";
 
 const VARIANT_OPTIONS = ["notice", "warning", "success", "error"];
 
@@ -58,7 +58,6 @@ function ToastPlayground() {
           <div className={`${styles.inputWrapper} ${styles.radioWrapper}`}>
             {VARIANT_OPTIONS.map((option) => {
               const id = `variant-${option}`;
-
               return (
                 <label key={id} htmlFor={id}>
                   <input
